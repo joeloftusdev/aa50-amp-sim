@@ -19,9 +19,9 @@
    });
 
  */
-static void runWithinPluginEditor (const std::function<void (PluginProcessor& plugin)>& testCode)
+static void runWithinPluginEditor (const std::function<void (GuitarAmpBasicAudioProcessor& plugin)>& testCode)
 {
-    PluginProcessor plugin;
+    GuitarAmpBasicAudioProcessor plugin;
     auto gui = juce::ScopedJuceInitialiser_GUI {};
     auto editor = plugin.createEditorIfNeeded();
 
