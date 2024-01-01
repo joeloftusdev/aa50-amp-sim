@@ -109,15 +109,19 @@ int AA50AudioProcessor::getCurrentProgram()
 
 void AA50AudioProcessor::setCurrentProgram(int index)
 {
+    (void)index;
 }
 
 const juce::String AA50AudioProcessor::getProgramName(int index)
 {
+    (void) index;
     return {};
 }
 
 void AA50AudioProcessor::changeProgramName(int index, const juce::String& newName)
 {
+    (void) index;
+    (void) newName;
 }
 
 //==============================================================================
@@ -300,6 +304,8 @@ bool AA50AudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) cons
 
 void AA50AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    (void) midiMessages;
+
     juce::ScopedNoDenormals noDenormals;
     auto inputChannels = getTotalNumInputChannels();
     auto outputChannels = getTotalNumOutputChannels();
