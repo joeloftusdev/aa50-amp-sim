@@ -26,7 +26,7 @@ namespace Gui {
 
         void paint(juce::Graphics& g) override
         {
-            const auto level = valueSupplier();
+            const auto meterLevel = valueSupplier();
 
             auto bounds = getLocalBounds().toFloat();
 
@@ -35,11 +35,11 @@ namespace Gui {
             g.fillRect(bounds);
 
             g.setGradientFill(gradient);
-            const auto scaledY = juce::jmap(level, -60.0f, 6.0f, 0.0f, static_cast<float>(getHeight()));
+            const auto scaledY = juce::jmap(meterLevel, -60.0f, 6.0f, 0.0f, static_cast<float>(getHeight()));
             g.fillRect(bounds.removeFromBottom(scaledY));
 
             auto currLevelBounds = getLocalBounds().toFloat();
-            currLevelBounds.setX(currLevelBounds.getX() + 100);
+            currLevelBounds.setX(currLevelBounds.getX() + 100.0f);
         }
 
         void resized() override
@@ -55,10 +55,12 @@ namespace Gui {
             gradient.addColour(0.5f, juce::Colours::yellow);
         }
 
-       // void paintOverChildren(::juce::Graphics& g) override
-       // {
-       //     g.drawImage(grill, getLocalBounds().toFloat());
-       // }
+        /*
+         void paintOverChildren(::juce::Graphics& g) override
+        {
+         g.drawImage(grill, getLocalBounds().toFloat());
+        }
+        */
 
         void setLevel(const float value)
         {

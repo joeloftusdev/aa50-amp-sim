@@ -17,13 +17,12 @@
 #include "LookAndFeel.h"
 
 //==============================================================================
-/**
-*/
-class GuitarAmpBasicAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Timer
+
+class AA50AudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
-    GuitarAmpBasicAudioProcessorEditor(GuitarAmpBasicAudioProcessor&);
-    ~GuitarAmpBasicAudioProcessorEditor() override;
+    AA50AudioProcessorEditor(AA50AudioProcessor&);
+    ~AA50AudioProcessorEditor() override;
 
     //==============================================================================
     void timerCallback() override;
@@ -31,7 +30,7 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
 
-    void modeMenuChanged();
+    void channelSelect();
     void fileLoader();
     void setSliderProperties(juce::Slider* sliderToSet);
     void makeSliderAttachments();
@@ -41,68 +40,56 @@ private:
     juce::LookAndFeel_V4 lookAndFeel;
     MXRLookAndFeel sliderLookAndFeel;
 
-    juce::Image levelMeterInputLines;
-    juce::Image levelMeterInputNums;
-    Gui::VerticalGradientMeter verticalGradientMeterInput;
-    Gui::VerticalGradientMeter verticalGradientMeterOutput;
+    Gui::VerticalGradientMeter meterOutput;
 
     juce::TextButton loadButton;
     juce::Label irName;
     juce::Image backgroundImage;
-    juce::Image cachedImage_BinaryData_bg_png;
     
-
+    
     std::unique_ptr<juce::FileChooser> fileChooser;
 
-    juce::Label labelWaveshapeType1;//Label for menu
-    juce::ComboBox waveshapeType1; //Menu selecting waveshaping function
+    juce::ComboBox ampChannel; 
 
-    juce::Slider sliderInputGain;
-    juce::Label labelInputGain;
+    juce::Slider sliderInput;
+    juce::Label labelInput;
 
+    juce::Slider sliderPreGain;
+    juce::Label labelPreGain; 
 
+    juce::Slider sliderPostGain;
+    juce::Label labelPostGain; 
 
-    juce::Slider sliderPreGain2;//Resonance slider
-    juce::Label labelPreGain2; //Resonance label
+    juce::Slider sliderResonance;
+    juce::Label labelResonance; 
 
- 
+    juce::Slider sliderTreble;
+    juce::Label labelTreble;
 
-    juce::Slider sliderPostGain;//Postgain slider
-    juce::Label labelPostGain; //Postgain label
+    juce::Slider sliderMid;
+    juce::Label labelMid;
 
-    juce::Slider sliderPreEQ;//PreEQ slider
-    juce::Label labelPreEQ; //PreEQ label
-
-   
-    //Filters
-    juce::Slider sliderFilterHighGain;
-    juce::Label labelFilterHighGain;
-
-    juce::Slider sliderFilterMidGain;
-    juce::Label labelFilterMidGain;
-
-    juce::Slider sliderFilterLowGain;
-    juce::Label labelFilterLowGain;
+    juce::Slider sliderBass;
+    juce::Label labelBass;
 
     juce::Slider sliderPresence;
     juce::Label labelPresence;
 
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentInputGain;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain2;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentInput;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPostGain;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreEQ;
-  //  std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttachmentWaveshapeType1;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentResonance;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPresence;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterHighGain;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterMidGain;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterLowGain;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentTreble;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentMid;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentBass;
    
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    GuitarAmpBasicAudioProcessor& audioProcessor;
+    AA50AudioProcessor& audioProcessor;
 
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GuitarAmpBasicAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AA50AudioProcessorEditor)
 };
