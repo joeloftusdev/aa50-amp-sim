@@ -21,6 +21,8 @@ build
 ```
 More info here (https://github.com/sudara/pamplejuce)
 
+Tested in [Reaper](https://www.reaper.fm/) & [Ableton Live](https://www.ableton.com/) - works as expected
+
 ## FYI
 I plan on writing a blog about how I made this & all the relevant resources  I used very soon.
 
