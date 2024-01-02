@@ -7,26 +7,29 @@ A guitar amp simulator plugin built with C++ & the JUCE Library. Loosely based o
 * Impulse response loader (load in your favourite IRs!)
 * Pre & Post Gain
 * Waveshaping distortion
-* Full EQ - Bass, Mid & Treble
+* EQ - Bass, Mid & Treble
 * Resonance
 * Presence
 * Output Meter
 
 ## How to Build
+(Run cmd/git bash/powershell as administrator)
 ```
-git clone
-Download CMake  
-git submodule update --init             
-build
+git clone <url>
+cd aa50-amp-sim
+git submodule update --init
+mkdir out
+cd out
+cmake ../
+cmake --build .
 ```
-More info here (https://github.com/sudara/pamplejuce)
+* More info & how to build on MacOs in the [pamplejuce repo](https://github.com/sudara/pamplejuce) 
+* You can find some impulse responses if needed [here](https://producelikeapro.com/blog/best-guitar-impulse-responses/)
+* Tested in [Reaper](https://www.reaper.fm/) ,[Ableton Live](https://www.ableton.com/) & [Cakewalk](https://www.cakewalk.com/) - works as expected
 
-Tested in [Reaper](https://www.reaper.fm/) & [Ableton Live](https://www.ableton.com/) - works as expected
-
-## FYI
+## TBA
 I plan on writing a blog about how I made this & all the relevant resources  I used very soon.
-
-This is still in its early stage. I plan to add more features in my spare time.
+This is still in its early stage, I plan to add more features in my spare time.
 
 ## Made With
 * [C++](https://isocpp.org/)
