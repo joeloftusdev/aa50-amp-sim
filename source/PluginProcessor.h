@@ -55,7 +55,7 @@ public:
     const juce::String getProgramName(int index) override;
     void changeProgramName(int index, const juce::String& newName) override;
 
-    void setFunctionToUse(std::string func);
+    void setWaveshaper();
 
     //==============================================================================
     void getStateInformation(juce::MemoryBlock& destData) override;
@@ -68,7 +68,6 @@ public:
     void resonance();
     void bottomEnd();
 
-    float getRMSInputValue(const int channel) const;
     float getRMSOutputValue(const int channel) const;
 
     juce::AudioProcessorValueTreeState apvts;
@@ -83,7 +82,7 @@ public:
     juce::dsp::Convolution irLoader;
 
 private:
-    enum
+    enum 
     {
         resonanceIndex,
         bottomEndIndex,
@@ -111,7 +110,6 @@ private:
     juce::dsp::Gain<float> _output;
 
     juce::dsp::ProcessSpec _spec;
-    juce::LinearSmoothedValue<float> _rmsInput;
     juce::LinearSmoothedValue<float> _rmsOutput;
 
 

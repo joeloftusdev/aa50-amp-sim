@@ -26,11 +26,8 @@ public:
 
     //==============================================================================
     void timerCallback() override;
-
     void paint(juce::Graphics&) override;
     void resized() override;
-
-    void channelSelect();
     void fileLoader();
     void setSliderProperties(juce::Slider* sliderToSet);
     void makeSliderAttachments();
@@ -46,10 +43,7 @@ private:
     juce::Label irName;
     juce::Image backgroundImage;
     
-    
     std::unique_ptr<juce::FileChooser> fileChooser;
-
-    juce::ComboBox ampChannel; 
 
     juce::Slider sliderInput;
     juce::Label labelInput;

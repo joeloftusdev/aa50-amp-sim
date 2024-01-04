@@ -14,8 +14,6 @@ AA50AudioProcessorEditor::AA50AudioProcessorEditor (AA50AudioProcessor& p)
     // editor's size to whatever you need it to be.
     setSize(1000, 300);
 
-
-   // addAndMakeVisible(verticalGradientMeterInput);
     addAndMakeVisible(meterOutput);
     startTimerHz(24);
 
@@ -120,10 +118,6 @@ void AA50AudioProcessorEditor::makeSliderAttachments()
     sliderAttachmentMid = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "MID", sliderMid);
     sliderAttachmentBass = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "BASS", sliderBass);
     sliderAttachmentPresence = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "PRESENCE", sliderPresence);
-
-    
-
-   
 }
 
 void AA50AudioProcessorEditor::timerCallback()
@@ -133,7 +127,6 @@ void AA50AudioProcessorEditor::timerCallback()
        meterOutput.setLevel(audioProcessor.getRMSOutputValue(0));
         meterOutput.repaint();
     }
-
 }
 
 void AA50AudioProcessorEditor::setSliderProperties (juce::Slider* sliderToSet)
@@ -146,8 +139,6 @@ void AA50AudioProcessorEditor::setSliderProperties (juce::Slider* sliderToSet)
 void AA50AudioProcessorEditor::fileLoader()
 {
     fileChooser = std::make_unique<juce::FileChooser>("Choose file", audioProcessor.root, "*");
-
-
 
     const auto fileChooserFlags = juce::FileBrowserComponent::openMode |
         juce::FileBrowserComponent::canSelectFiles |
@@ -172,8 +163,6 @@ void AA50AudioProcessorEditor::fileLoader()
                     juce::dsp::Convolution::Trim::yes, 0);
        
                 irName.setText(result.getFileName(), juce::dontSendNotification);
-                
-
             }
         });
 }
@@ -181,17 +170,11 @@ void AA50AudioProcessorEditor::fileLoader()
 //==============================================================================
 void AA50AudioProcessorEditor::paint(juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(juce::Colours::darkgrey);
 
     {
         g.drawImage(backgroundImage, getLocalBounds().toFloat());
     }
-
-    
-   
-   
-    
 }
 
 void AA50AudioProcessorEditor::resized()
@@ -201,7 +184,6 @@ void AA50AudioProcessorEditor::resized()
     int meterX = 972;
     int meterY = 55;
     meterOutput.setBounds(meterX, meterY, meterWidth, meterHeight);
-
 
     loadButton.setBounds(35 - 10, 20, 100, 35);
     irName.setBounds(35 + 100, 20, 120, 35);
@@ -215,25 +197,5 @@ void AA50AudioProcessorEditor::resized()
   sliderPreGain.setBounds(proportionOfWidth(0.15f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
   sliderInput.setBounds(proportionOfWidth(0.04f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
   
-  
-   
-}
-
-
-
-void AA50AudioProcessorEditor::channelSelect()
-{
-    switch (ampChannel.getSelectedId())
-    {
-    case 1:
-        audioProcessor.waveshaperFunction = "Lead";
-        break;
-    case 2:
-        audioProcessor.waveshaperFunction = "Crunch";
-        break;
-    default:
-        audioProcessor.waveshaperFunction = "Lead";
-        break;
-    }
 }
 

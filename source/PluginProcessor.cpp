@@ -12,24 +12,14 @@ AA50AudioProcessor::AA50AudioProcessor()
 #endif
         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-    ), apvts(*this, nullptr, juce::Identifier("PARAMETERS"), createParameterLayout())
-#endif
+    ), apvts(*this, nullptr, juce::Identifier("PARAMETERS"), createParameterLayout()),
+      valueTree ("Variables", {}, { { "Group", { { "name", "IR Vars" } }, { { "Parameter", { { "id", "file1" }, { "value", "/" } } }, { "Parameter", { { "id", "root" }, { "value", "/" } } } } } }),
+      input (true)
 {
-    valueTree =
-    {
-        "Variables", {},
-        {
-            { "Group", {{"name", "IR Vars"}},
-                {
-                    {"Parameter", {{"id", "file1"}, {"value", "/"}}},
-                    {"Parameter", {{"id", "root"}, {"value", "/"}}}
-                }
-            }
-        }
-    };
-    input = true;
-    apvts.state.addListener(this);
+    apvts.state.addListener (this);
 }
+#endif
+
 
 AA50AudioProcessor::~AA50AudioProcessor()
 {
@@ -47,13 +37,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout AA50AudioProcessor::createPa
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "TREBLE", 1 }, "Treble", 0.0f, 2.0f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "MID", 1 }, "Mid", 0.0f, 2.0f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "BASS", 1 }, "Bass", 0.0f, 2.0f, 1.0f));
-    parameters.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{ "LEADCHANNEL", 1 }, "LeadChannel",
-        juce::StringArray{ "Lead", "Crunch" },
+    parameters.push_back (std::make_unique<juce::AudioParameterChoice> (
+        juce::ParameterID { "LEADCHANNEL", 1 },
+        "LeadChannel",
+        juce::StringArray { "Lead" }, 
         1));
-
     return { parameters.begin(), parameters.end() };
-
- 
 }
 
 
@@ -126,6 +115,8 @@ void AA50AudioProcessor::changeProgramName(int index, const juce::String& newNam
 
 //==============================================================================
 
+
+
 void AA50AudioProcessor::presence()
 {
     float presenceEq = *apvts.getRawParameterValue ("PRESENCE");
@@ -163,12 +154,9 @@ void AA50AudioProcessor::equalize()
     float mid = *apvts.getRawParameterValue ("MID");
     float bass = *apvts.getRawParameterValue ("BASS");
 
-    if (treble == 0.00f)
-        treble = 0.01f;
-    if (mid == 0.00f)
-        mid = 0.01f;
-    if (bass == 0.00f)
-        bass = 0.01f;
+    treble = juce::jlimit (0.01f, 2.0f, treble);
+    mid = juce::jlimit (0.01f, 2.0f, mid);
+    bass = juce::jlimit (0.01f, 2.0f, bass);
 
     auto& trebleFilter = processorChain.get<trebleIndex>();
     *trebleFilter.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 5000.0f, 0.6f, treble);
@@ -180,40 +168,29 @@ void AA50AudioProcessor::equalize()
     *bassFilter.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 100.0f, 0.6f, bass);
 }
 
-void AA50AudioProcessor::setFunctionToUse (std::string func)
+
+void AA50AudioProcessor::setWaveshaper()
 {
     auto& waveshaper = processorChain.get<waveshaperIndex>();
 
-    if (func == "Lead")
-    {
-        waveshaper.functionToUse = [] (float x) {
-            float a, x2, y;
-            x = x * 0.25f;
-            a = std::abs (x);
-            x2 = x * x;
-            y = 1 - 1 / (1 + a + x2 + 0.66422417311781f * x2 * a + 0.36483285408241f * x2 * x2);
-            return (x >= 0) ? y : -y;
-        };
-        currentWaveshapeFunction = "Lead";
-    }
-    else if (func == "Crunch")
-    {
-        waveshaper.functionToUse = [] (float x) {
-            return std::tanh (x);
-        };
-        currentWaveshapeFunction = "Crunch";
-    }
-    return;
+    waveshaper.functionToUse = [] (float x) {
+        float a, x2, y;
+        x = x * 0.25f;
+        a = std::abs (x);
+        x2 = x * x;
+        y = 1 - 1 / (1 + a + x2 + 0.66422417311781f * x2 * a + 0.36483285408241f * x2 * x2);
+        return (x >= 0) ? y : -y;
+    };
+
+    currentWaveshapeFunction = "Lead";
 }
+
 
 
 //==============================================================================
 void AA50AudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     input = true;
-
-    _rmsInput.reset(sampleRate, 0.5f);
-    _rmsInput.setCurrentAndTargetValue(-100.0f);
 
     _rmsOutput.reset(sampleRate, 0.5f);
     _rmsOutput.setCurrentAndTargetValue(-100.0f);
@@ -223,23 +200,8 @@ void AA50AudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     _spec.numChannels = getTotalNumOutputChannels();
     reset();
 
-    auto waveshapeInitFunction = apvts.getRawParameterValue("LEADCHANNEL");
-    switch ((int)*waveshapeInitFunction) {
-    case 1:
-        setFunctionToUse("Lead");
-        waveshaperFunction = "Lead";
-        break;
-    case 2:
-        setFunctionToUse("Crunch");
-        waveshaperFunction = "Crunch";
-        break;
-
-    default:
-        setFunctionToUse("Lead");
-        waveshaperFunction = "Lead";
-        break;
-    }
-
+    setWaveshaper();
+    waveshaperFunction = "Lead";
 
     _input.setGainDecibels(*apvts.getRawParameterValue("INPUT"));
     _output.setGainDecibels(*apvts.getRawParameterValue("POSTGAIN"));
@@ -313,8 +275,7 @@ void AA50AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mi
     for (auto i = inputChannels; i < outputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    if (waveshaperFunction != currentWaveshapeFunction)
-        setFunctionToUse(waveshaperFunction);
+    setWaveshaper();
 
     _input.setGainDecibels(*apvts.getRawParameterValue("INPUT"));
 
@@ -324,13 +285,6 @@ void AA50AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::Mi
     _input.process(inputContextReplacing);
 
     input = true;
-    _rmsInput.skip(buffer.getNumSamples());
-
-    const auto valueIn = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-    if (valueIn < _rmsInput.getCurrentValue())
-        _rmsInput.setTargetValue(valueIn);
-    else
-        _rmsInput.setCurrentAndTargetValue(valueIn);
 
     auto& preGain = processorChain.get<preGainIndex>();
     preGain.setGainDecibels(*apvts.getRawParameterValue("PREGAIN"));
@@ -371,25 +325,12 @@ void AA50AudioProcessor::reset()
     irLoader.reset(); 
 }
 
-float AA50AudioProcessor::getRMSInputValue(const int channel) const
-{
-    jassert(channel == 0 || channel == 1);
-    if (channel == 0)
-        return _rmsInput.getCurrentValue();
-    if (channel == 1)
-        return _rmsInput.getCurrentValue();
-    return 0;
-}
-
 
 float AA50AudioProcessor::getRMSOutputValue(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
-    if (channel == 0)
-        return _rmsOutput.getCurrentValue();
-    if (channel == 1)
-        return _rmsOutput.getCurrentValue();
-    return 0;
+    return _rmsOutput.getCurrentValue();
+
 }
 
 //==============================================================================
