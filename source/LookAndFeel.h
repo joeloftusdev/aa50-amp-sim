@@ -16,10 +16,6 @@
 class MXRLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-   
-
-        
-
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
         const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override
     {
@@ -33,15 +29,12 @@ public:
         auto ry = centreY - radius;
         auto rw = radius * 2.0f;
 
-        // background circle fill
         g.setColour(juce::Colour::fromRGB(30,27,27));
         g.fillEllipse(rx, ry, rw, rw);
 
-        // outer circle 
         g.setColour(jcolor);
         g.drawEllipse(rx, ry, rw, rw, 1.0f);
 
-        // pointer
         juce::Path p;
         auto pointerLength = radius * 0.47f;
         auto pointerThickness = radius / 10;
@@ -53,12 +46,10 @@ public:
 
         juce::Path p2;
         auto dotsize = radius / 10;
-        p2.addEllipse(-dotsize / 2, -radius * 0.95f, dotsize, dotsize); // float x, float y, float w, float h
+        p2.addEllipse(-dotsize / 2, -radius * 0.95f, dotsize, dotsize); 
         p2.applyTransform(juce::AffineTransform::rotation(angle).translated(centreX, centreY));
         g.fillPath(p2);
 
-
-        // 7 edges
         float jangle_step = 2.f * M_PI / 7.f;
         float jangle = angle + (M_PI + jangle_step) / 2;
         float jr = radius * 0.8f;
@@ -75,7 +66,6 @@ public:
             jy = jy1;
         }
 
-        // 7 arcs
         g.setColour(juce::Colours::red);
         jr = radius * 2;
         jangle = angle + (M_PI + jangle_step) / 2;

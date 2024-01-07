@@ -31,7 +31,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AA50AudioProcessor::createPa
 
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "INPUT", 1 }, "Input", 0.0f, 40.0f, 0.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "POSTGAIN", 1 }, "PostGain", 0.0f, 40.0f, 0.0f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "RESONANCE", 1 }, "RESONANCE", 1.0f, 10.0f, 5.0f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "RESONANCE", 1 }, "Resonance", 1.0f, 10.0f, 5.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "PREGAIN", 1 }, "PreGain", 0.0f, 48.0f, 0.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "PRESENCE", 1 }, "Presence", 0.5f, 1.5f, 1.0f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ "TREBLE", 1 }, "Treble", 0.0f, 2.0f, 1.0f));
@@ -201,7 +201,6 @@ void AA50AudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     reset();
 
     setWaveshaper();
-    waveshaperFunction = "Lead";
 
     _input.setGainDecibels(*apvts.getRawParameterValue("INPUT"));
     _output.setGainDecibels(*apvts.getRawParameterValue("POSTGAIN"));
@@ -330,7 +329,6 @@ float AA50AudioProcessor::getRMSOutputValue(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
     return _rmsOutput.getCurrentValue();
-
 }
 
 //==============================================================================

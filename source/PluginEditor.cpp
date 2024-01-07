@@ -7,100 +7,98 @@
 //==============================================================================
 AA50AudioProcessorEditor::AA50AudioProcessorEditor (AA50AudioProcessor& p)
     : AudioProcessorEditor(&p),
-    meterOutput([&]() {return audioProcessor.getRMSOutputValue(0); }),
+    _meterOutput([&]() {return audioProcessor.getRMSOutputValue(0); }),
     audioProcessor(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize(1000, 300);
 
-    addAndMakeVisible(meterOutput);
+    addAndMakeVisible(_meterOutput);
     startTimerHz(24);
 
-    addAndMakeVisible(loadButton);
-    loadButton.setButtonText("Load IR");
-    loadButton.setColour(juce::TextButton::buttonColourId, juce::Colour::fromRGB(30, 27, 27));
-    loadButton.setColour(juce::ComboBox::outlineColourId, juce::Colour::fromRGB(144, 128, 128));
-    loadButton.setColour(juce::TextButton::textColourOffId, juce::Colour::fromRGB(227, 195, 195));
-    loadButton.onClick = [this]()
+    addAndMakeVisible(_loadButton);
+    _loadButton.setButtonText("Load IR");
+    _loadButton.setColour(juce::TextButton::buttonColourId, juce::Colour::fromRGB(30, 27, 27));
+    _loadButton.setColour(juce::ComboBox::outlineColourId, juce::Colour::fromRGB(144, 128, 128));
+    _loadButton.setColour(juce::TextButton::textColourOffId, juce::Colour::fromRGB(227, 195, 195));
+    _loadButton.onClick = [this]()
         {
             fileLoader();
         };
-    irName.setText(audioProcessor.savedFile.getFileName(), juce::dontSendNotification);
-    irName.setColour(juce::Label::backgroundColourId, juce::Colour::fromRGB(30, 27, 27));
-    irName.setColour(juce::Label::outlineColourId, juce::Colour::fromRGB(144, 128, 128));
-    irName.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
-    addAndMakeVisible(irName);
+    _irName.setText(audioProcessor.savedFile.getFileName(), juce::dontSendNotification);
+    _irName.setColour(juce::Label::backgroundColourId, juce::Colour::fromRGB(30, 27, 27));
+    _irName.setColour(juce::Label::outlineColourId, juce::Colour::fromRGB(144, 128, 128));
+    _irName.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
+    addAndMakeVisible(_irName);
 
-    addAndMakeVisible(sliderInput);
-    setSliderProperties(&sliderInput);
-    sliderInput.setLookAndFeel(&sliderLookAndFeel);
-    labelInput.attachToComponent(&sliderInput, false);
-    labelInput.setText("VOLUME", juce::dontSendNotification);
-    labelInput.setJustificationType(juce::Justification::centred);
-    labelInput.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
+    addAndMakeVisible(_sliderInput);
+    setSliderProperties(&_sliderInput);
+    _sliderInput.setLookAndFeel(&_sliderLookAndFeel);
+    _labelInput.attachToComponent(&_sliderInput, false);
+    _labelInput.setText("VOLUME", juce::dontSendNotification);
+    _labelInput.setJustificationType(juce::Justification::centred);
+    _labelInput.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
 
-    addAndMakeVisible(sliderPreGain);
-    setSliderProperties(&sliderPreGain);
-    sliderPreGain.setLookAndFeel(&sliderLookAndFeel);
-    labelPreGain.attachToComponent(&sliderPreGain, false);
-    labelPreGain.setText("PRE GAIN", juce::dontSendNotification);
-    labelPreGain.setJustificationType(juce::Justification::centred);
-    labelPreGain.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
+    addAndMakeVisible(_sliderPreGain);
+    setSliderProperties(&_sliderPreGain);
+    _sliderPreGain.setLookAndFeel(&_sliderLookAndFeel);
+    _labelPreGain.attachToComponent(&_sliderPreGain, false);
+    _labelPreGain.setText("PRE GAIN", juce::dontSendNotification);
+    _labelPreGain.setJustificationType(juce::Justification::centred);
+    _labelPreGain.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
 
-    addAndMakeVisible(sliderPostGain);
-    setSliderProperties(&sliderPostGain);
-    sliderPostGain.setLookAndFeel(&sliderLookAndFeel);
-    labelPostGain.attachToComponent(&sliderPostGain, false);
-    labelPostGain.setText("POST GAIN", juce::dontSendNotification);
-    labelPostGain.setJustificationType(juce::Justification::centred);
-    labelPostGain.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
+    addAndMakeVisible(_sliderPostGain);
+    setSliderProperties(&_sliderPostGain);
+    _sliderPostGain.setLookAndFeel(&_sliderLookAndFeel);
+    _labelPostGain.attachToComponent(&_sliderPostGain, false);
+    _labelPostGain.setText("POST GAIN", juce::dontSendNotification);
+    _labelPostGain.setJustificationType(juce::Justification::centred);
+    _labelPostGain.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
 
-    addAndMakeVisible (sliderResonance);
-    setSliderProperties (&sliderResonance);
-    sliderResonance.setLookAndFeel (&sliderLookAndFeel);
-    labelResonance.attachToComponent (&sliderResonance, false);
-    labelResonance.setText ("RESONANCE", juce::dontSendNotification);
-    labelResonance.setJustificationType (juce::Justification::centred);
-    labelResonance.setColour (juce::Label::textColourId, juce::Colour::fromRGB (227, 195, 195));
+    addAndMakeVisible (_sliderResonance);
+    setSliderProperties (&_sliderResonance);
+    _sliderResonance.setLookAndFeel (&_sliderLookAndFeel);
+    _labelResonance.attachToComponent (&_sliderResonance, false);
+    _labelResonance.setText ("RESONANCE", juce::dontSendNotification);
+    _labelResonance.setJustificationType (juce::Justification::centred);
+    _labelResonance.setColour (juce::Label::textColourId, juce::Colour::fromRGB (227, 195, 195));
 
-    addAndMakeVisible(sliderTreble);
-    setSliderProperties (&sliderTreble);
-    sliderTreble.setLookAndFeel (&sliderLookAndFeel);
-    labelTreble.attachToComponent (&sliderTreble, false);
-    labelTreble.setText ("TREBLE", juce::dontSendNotification);
-    labelTreble.setJustificationType (juce::Justification::centred);
-    labelTreble.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
+    addAndMakeVisible(_sliderTreble);
+    setSliderProperties (&_sliderTreble);
+    _sliderTreble.setLookAndFeel (&_sliderLookAndFeel);
+    _labelTreble.attachToComponent (&_sliderTreble, false);
+    _labelTreble.setText ("TREBLE", juce::dontSendNotification);
+    _labelTreble.setJustificationType (juce::Justification::centred);
+    _labelTreble.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
 
-    addAndMakeVisible(sliderMid);
-    setSliderProperties(&sliderMid);
-    sliderMid.setLookAndFeel(&sliderLookAndFeel);
-    labelMid.attachToComponent (&sliderMid, false);
-    labelMid.setText ("MID", juce::dontSendNotification);
-    labelMid.setJustificationType (juce::Justification::centred);
-    labelMid.setColour (juce::Label::textColourId, juce::Colour::fromRGB (227, 195, 195));
+    addAndMakeVisible(_sliderMid);
+    setSliderProperties(&_sliderMid);
+    _sliderMid.setLookAndFeel(&_sliderLookAndFeel);
+    _labelMid.attachToComponent (&_sliderMid, false);
+    _labelMid.setText ("MID", juce::dontSendNotification);
+    _labelMid.setJustificationType (juce::Justification::centred);
+    _labelMid.setColour (juce::Label::textColourId, juce::Colour::fromRGB (227, 195, 195));
 
-    addAndMakeVisible(sliderBass);
-    setSliderProperties (&sliderBass);
-    sliderBass.setLookAndFeel (&sliderLookAndFeel);
-    labelBass.attachToComponent (&sliderBass, false);
-    labelBass.setText ("BASS", juce::dontSendNotification);
-    labelBass.setJustificationType (juce::Justification::centred);
-    labelBass.setColour (juce::Label::textColourId, juce::Colour::fromRGB (227, 195, 195));
+    addAndMakeVisible(_sliderBass);
+    setSliderProperties (&_sliderBass);
+    _sliderBass.setLookAndFeel (&_sliderLookAndFeel);
+    _labelBass.attachToComponent (&_sliderBass, false);
+    _labelBass.setText ("BASS", juce::dontSendNotification);
+    _labelBass.setJustificationType (juce::Justification::centred);
+    _labelBass.setColour (juce::Label::textColourId, juce::Colour::fromRGB (227, 195, 195));
 
-    addAndMakeVisible(sliderPresence);
-    setSliderProperties(&sliderPresence);
-    sliderPresence.setLookAndFeel(&sliderLookAndFeel);
-    labelPresence.attachToComponent(&sliderPresence, false);
-    labelPresence.setText("PRESENCE", juce::dontSendNotification);
-    labelPresence.setJustificationType(juce::Justification::centred);
-    labelPresence.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
-
+    addAndMakeVisible(_sliderPresence);
+    setSliderProperties(&_sliderPresence);
+    _sliderPresence.setLookAndFeel(&_sliderLookAndFeel);
+    _labelPresence.attachToComponent(&_sliderPresence, false);
+    _labelPresence.setText("PRESENCE", juce::dontSendNotification);
+    _labelPresence.setJustificationType(juce::Justification::centred);
+    _labelPresence.setColour(juce::Label::textColourId, juce::Colour::fromRGB(227, 195, 195));
 
     makeSliderAttachments();
 
-   
-    backgroundImage = juce::ImageCache::getFromMemory(BinaryData::bg_png, BinaryData::bg_pngSize);
+    _backgroundImage = juce::ImageCache::getFromMemory(BinaryData::bg_png, BinaryData::bg_pngSize);
 }
 
 AA50AudioProcessorEditor::~AA50AudioProcessorEditor()
@@ -110,22 +108,22 @@ AA50AudioProcessorEditor::~AA50AudioProcessorEditor()
 
 void AA50AudioProcessorEditor::makeSliderAttachments()
 {
-    sliderAttachmentInput = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "INPUT", sliderInput);
-    sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "POSTGAIN", sliderPostGain);
-    sliderAttachmentResonance = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "RESONANCE", sliderResonance);
-    sliderAttachmentPreGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "PREGAIN", sliderPreGain);
-    sliderAttachmentTreble = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "TREBLE", sliderTreble);
-    sliderAttachmentMid = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "MID", sliderMid);
-    sliderAttachmentBass = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "BASS", sliderBass);
-    sliderAttachmentPresence = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "PRESENCE", sliderPresence);
+    _sliderAttachmentInput = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "INPUT", _sliderInput);
+    _sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "POSTGAIN", _sliderPostGain);
+    _sliderAttachmentResonance = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment> (audioProcessor.apvts, "RESONANCE", _sliderResonance);
+    _sliderAttachmentPreGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "PREGAIN", _sliderPreGain);
+    _sliderAttachmentTreble = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "TREBLE", _sliderTreble);
+    _sliderAttachmentMid = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "MID", _sliderMid);
+    _sliderAttachmentBass = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "BASS", _sliderBass);
+    _sliderAttachmentPresence = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.apvts, "PRESENCE", _sliderPresence);
 }
 
 void AA50AudioProcessorEditor::timerCallback()
 {
     if (audioProcessor.input)
     {
-       meterOutput.setLevel(audioProcessor.getRMSOutputValue(0));
-        meterOutput.repaint();
+       _meterOutput.setLevel(audioProcessor.getRMSOutputValue(0));
+       _meterOutput.repaint();
     }
 }
 
@@ -138,13 +136,13 @@ void AA50AudioProcessorEditor::setSliderProperties (juce::Slider* sliderToSet)
 
 void AA50AudioProcessorEditor::fileLoader()
 {
-    fileChooser = std::make_unique<juce::FileChooser>("Choose file", audioProcessor.root, "*");
+    _fileChooser = std::make_unique<juce::FileChooser>("Choose file", audioProcessor.root, "*");
 
     const auto fileChooserFlags = juce::FileBrowserComponent::openMode |
         juce::FileBrowserComponent::canSelectFiles |
         juce::FileBrowserComponent::canSelectDirectories;
 
-    fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+    _fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
         {
             
             juce::File result(chooser.getResult());
@@ -162,7 +160,7 @@ void AA50AudioProcessorEditor::fileLoader()
                 audioProcessor.irLoader.loadImpulseResponse(audioProcessor.savedFile, juce::dsp::Convolution::Stereo::yes,
                     juce::dsp::Convolution::Trim::yes, 0);
        
-                irName.setText(result.getFileName(), juce::dontSendNotification);
+                _irName.setText(result.getFileName(), juce::dontSendNotification);
             }
         });
 }
@@ -171,9 +169,8 @@ void AA50AudioProcessorEditor::fileLoader()
 void AA50AudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
-
     {
-        g.drawImage(backgroundImage, getLocalBounds().toFloat());
+        g.drawImage(_backgroundImage, getLocalBounds().toFloat());
     }
 }
 
@@ -183,19 +180,19 @@ void AA50AudioProcessorEditor::resized()
     int meterHeight = 510;
     int meterX = 972;
     int meterY = 55;
-    meterOutput.setBounds(meterX, meterY, meterWidth, meterHeight);
+    _meterOutput.setBounds(meterX, meterY, meterWidth, meterHeight);
 
-    loadButton.setBounds(35 - 10, 20, 100, 35);
-    irName.setBounds(35 + 100, 20, 120, 35);
+    _loadButton.setBounds(35 - 10, 20, 100, 35);
+    _irName.setBounds(35 + 100, 20, 120, 35);
     
-  sliderPresence.setBounds(proportionOfWidth(0.81f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  sliderResonance.setBounds (proportionOfWidth (0.70f) - (proportionOfWidth (0.08f) / 2), proportionOfHeight (0.9f) - (proportionOfHeight (0.402f) / 2), proportionOfWidth (0.2f), proportionOfHeight (0.22f));
-  sliderPostGain.setBounds(proportionOfWidth(0.59f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  sliderTreble.setBounds(proportionOfWidth(0.48f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  sliderMid.setBounds(proportionOfWidth(0.37f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  sliderBass.setBounds(proportionOfWidth(0.26f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  sliderPreGain.setBounds(proportionOfWidth(0.15f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  sliderInput.setBounds(proportionOfWidth(0.04f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
-  
+  _sliderPresence.setBounds(proportionOfWidth(0.81f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+  _sliderResonance.setBounds (proportionOfWidth (0.70f) - (proportionOfWidth (0.08f) / 2), proportionOfHeight (0.9f) - (proportionOfHeight (0.402f) / 2), proportionOfWidth (0.2f), proportionOfHeight (0.22f));
+  _sliderPostGain.setBounds(proportionOfWidth(0.59f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+  _sliderTreble.setBounds(proportionOfWidth(0.48f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+  _sliderMid.setBounds(proportionOfWidth(0.37f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+  _sliderBass.setBounds(proportionOfWidth(0.26f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+  _sliderPreGain.setBounds(proportionOfWidth(0.15f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+  _sliderInput.setBounds(proportionOfWidth(0.04f) - (proportionOfWidth(0.08f) / 2), proportionOfHeight(0.9f) - (proportionOfHeight(0.402f) / 2), proportionOfWidth(0.2f), proportionOfHeight(0.22f));
+
 }
 

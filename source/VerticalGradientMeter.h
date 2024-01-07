@@ -18,15 +18,14 @@ namespace Gui {
     class VerticalGradientMeter : public juce::Component, public juce::Timer
     {
     public:
-        VerticalGradientMeter(std::function<float()>&& valueFunction) : valueSupplier(std::move(valueFunction))
+        VerticalGradientMeter(std::function<float()>&& valueFunction) : _valueSupplier(std::move(valueFunction))
         {
             startTimerHz(24);
-           // grill = juce::ImageCache::getFromMemory(BinaryData::MeterGrill_png, BinaryData::MeterGrill_pngSize);
         }
 
         void paint(juce::Graphics& g) override
         {
-            const auto meterLevel = valueSupplier();
+            const auto meterLevel = _valueSupplier();
 
             auto bounds = getLocalBounds().toFloat();
 
@@ -34,7 +33,7 @@ namespace Gui {
             g.setColour(juce::Colours::black);
             g.fillRect(bounds);
 
-            g.setGradientFill(gradient);
+            g.setGradientFill(_gradient);
             const auto scaledY = juce::jmap(meterLevel, -60.0f, 6.0f, 0.0f, static_cast<float>(getHeight()));
             g.fillRect(bounds.removeFromBottom(scaledY));
 
@@ -45,22 +44,16 @@ namespace Gui {
         void resized() override
         {
             const auto bounds = getLocalBounds().toFloat();
-            gradient = juce::ColourGradient{
+            _gradient = juce::ColourGradient{
                 juce::Colours::green,
                 bounds.getBottomLeft(),
                 juce::Colours::red,
                 bounds.getTopLeft(),
                 false
             };
-            gradient.addColour(0.5f, juce::Colours::yellow);
+            _gradient.addColour(0.5f, juce::Colours::yellow);
         }
 
-        /*
-         void paintOverChildren(::juce::Graphics& g) override
-        {
-         g.drawImage(grill, getLocalBounds().toFloat());
-        }
-        */
 
         void setLevel(const float value)
         {
@@ -73,9 +66,8 @@ namespace Gui {
         }
 
     private:
-        std::function<float()> valueSupplier;
-        juce::ColourGradient gradient{};
-        //juce::Image grill;
+        std::function<float()> _valueSupplier;
+        juce::ColourGradient _gradient{};
         float level = -60.0f;
 
     };
