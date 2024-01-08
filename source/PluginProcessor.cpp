@@ -182,7 +182,6 @@ void AA50AudioProcessor::setWaveshaper()
         return (x >= 0) ? y : -y;
     };
 
-    currentWaveshapeFunction = "Lead";
 }
 
 
