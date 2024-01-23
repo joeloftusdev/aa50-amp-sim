@@ -20,7 +20,7 @@ cd aa50-amp-sim
 git submodule update --init
 mkdir out
 cd out
-cmake ../
+cmake ..
 cmake --build .
 ```
 * More info & how to build on MacOs in the [pamplejuce repo](https://github.com/sudara/pamplejuce) 
