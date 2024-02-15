@@ -27,10 +27,6 @@ cmake --build .
 * You can find some impulse responses if needed [here](https://producelikeapro.com/blog/best-guitar-impulse-responses/)
 * Tested in [Reaper](https://www.reaper.fm/) ,[Ableton Live](https://www.ableton.com/) & [Cakewalk](https://www.cakewalk.com/) - works as expected
 
-## TBA
-I plan on writing a blog about how I made this & all the relevant resources  I used very soon.
-This is still in its early stage, I plan to add more features in my spare time.
-
 ## Made With
 * [C++](https://isocpp.org/)
 * [Juce](https://juce.com/)
