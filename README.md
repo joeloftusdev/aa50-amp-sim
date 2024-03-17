@@ -27,6 +27,10 @@ cmake --build .
 * You can find some impulse responses if needed [here](https://producelikeapro.com/blog/best-guitar-impulse-responses/)
 * Tested in [Reaper](https://www.reaper.fm/) ,[Ableton Live](https://www.ableton.com/) & [Cakewalk](https://www.cakewalk.com/) - works as expected
 
+## Credit
+* Level Meter [https://www.youtube.com/@akashmurthy](https://www.youtube.com/watch?v=ILMdPjFQ9ps&ab_channel=AkashMurthy)
+* Knobs [github.com/igorpie/Jb_knobs](https://github.com/igorpie/Jb_knobs)
+
 ## Made With
 * [C++](https://isocpp.org/)
 * [Juce](https://juce.com/)
