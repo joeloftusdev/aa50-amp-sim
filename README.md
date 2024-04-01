@@ -1,7 +1,7 @@
 ## AA50 AMP SIMULATOR
 ![aa50](https://github.com/joeloftusdev/aa50-amp-sim/assets/152509645/1fa6c6f4-5c75-49bb-9881-0957f77bba23)
 
-A guitar amp simulator plugin built with C++ & the JUCE Library. Loosely based on a well known 90's "block letter" amp head.
+A guitar amp sim built with C++ & the JUCE Library. Loosely based on a well known 90's "block letter" amp head.
 
 ## Features
 * Impulse response loader (load in your favourite IRs!)
